@@ -1,16 +1,16 @@
 import { fetchTodos, createTodo } from './todoService';
 import { createSlice } from '@reduxjs/toolkit';
 
-const getTodos = (dispatch: any) => async () => {
+export const getTodos = () => async (dispatch: any) => {
     try {
-        // @ts-ignore
-        const response = getTodos()
+        const response = await fetchTodos()
         dispatch(setTodos(response))
+        console.log(response)
     } catch(err) {
         console.log(err)
     }
 }
-const addTodos = (dispatch: any) => async (formData: any) => {}
+const addTodos = (formData: any) => async (dispatch: any) => {}
 
 const todoSlice = createSlice({
     name: 'todos',
