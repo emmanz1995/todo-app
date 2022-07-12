@@ -2,6 +2,12 @@ import styled from 'styled-components';
 
 export const StyledAddTodoContainer = styled.div`
   margin: 20px 0;
+  padding: 30px;
+  .add-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   input {
     width: 100%;
     padding: 7px;
@@ -16,4 +22,21 @@ export const StyledAddTodoContainer = styled.div`
     border-radius: 5px;
     height: 100px;
   }
+  .btn-close {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 2px 7px;
+    cursor: pointer;
+  }
+  .error {
+    color: red;
+  }
+`;
+
+export const StyledButton = styled.button`
+  width: 100%;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 `;

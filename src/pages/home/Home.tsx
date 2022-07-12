@@ -1,26 +1,30 @@
-import React, { FC } from 'react';
-import Todo from '../../interface';
-import { StyledNav, StyledTable } from './styledHome';
-import { useDispatch } from 'react-redux';
-import { removeTodo } from '../../feature/todo/todoSlice';
+import React, { FC, useEffect, useState } from 'react';
+import { ITodos } from '../../types';
+import { StyledNav, StyledSection } from './styledHome';
+import { useDispatch, useSelector } from 'react-redux';
 import AddTodo from '../../components/todoForm/AddTodo';
+import { getAllTodos, deleteTodo } from '../../feature/action/todoAction';
+import Card from '../../components/card/Card';
+import { AnimatePresence } from 'framer-motion';
 
-const Home: FC<({ todos: Todo[] })> = ({ todos }) => {
-    const dispatch = useDispatch()
-    const handleDeleteTodo = (id: string | undefined) => {
-        // @ts-ignore
-        dispatch(removeTodo(id))
+const Home: FC = () => {
+    const dispatch: any = useDispatch()
+    const { todos, loading } = useSelector((state: any) => state.todos)
+    // const filterTodo = useSelector((state: any) => state.todos.filter((todo: any) => ( todo.todos.isComplete )))
+    const [isOpen, setIsOpen] = useState(false);
+    useEffect(() => {
+        dispatch(getAllTodos())
+    }, [])
+
+    const handleToggle = () => setIsOpen(!isOpen)
+    const handleOpen = () => setIsOpen(true)
+    const handleClose: any = () => setIsOpen(false)
+
+    const handleDeleteTodo = (id: string) => {
+        dispatch(deleteTodo(id))
     }
-    const displayTodos = todos?.length > 0 ? todos?.map((todo: Todo) => (
-        <tr key={todo._id}>
-            <td>{todo.title}</td>
-            <td>{todo.content}</td>
-            <td>{todo.createdAt}</td>
-            <td>
-                <button onClick={() => handleDeleteTodo(todo._id)}>Delete</button>
-                <button>Update</button>
-            </td>
-        </tr>
+    const displayTodos = todos?.length > 0 ? todos?.map((todo: ITodos) => (
+        <Card todo={todo} />
     )): <p>No Todos found!</p>
 
     return (
@@ -29,18 +33,17 @@ const Home: FC<({ todos: Todo[] })> = ({ todos }) => {
                 <h3>Todo Tracker</h3>
             </StyledNav>
             <div style={{ margin: '0 auto', maxWidth: '1100px', padding: '20px 0' }}>
-                <div>
-                    <AddTodo />
-                </div>
-                <StyledTable>
-                    <tr>
-                        <th>Title</th>
-                        <th>Content</th>
-                        <th>Create At</th>
-                        <th>Action</th>
-                    </tr>
+                <AnimatePresence
+                    initial={false}
+                    exitBeforeEnter={true}
+                    onExitComplete={() => null}
+                >
+                    {isOpen && <AddTodo handleClose={handleClose} />}
+                </AnimatePresence>
+                <button onClick={handleOpen}>Add Todo</button>
+                <StyledSection>
                     {displayTodos}
-                </StyledTable>
+                </StyledSection>
             </div>
         </div>
     );

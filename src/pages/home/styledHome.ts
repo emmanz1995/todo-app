@@ -6,6 +6,14 @@ export const StyledNav = styled.div`
   max-width: 1100px;
 `;
 
+export const StyledSection = styled.div`
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+`
+
 export const StyledTable = styled.table`
   font-family: arial, sans-serif;
   border-collapse: collapse;

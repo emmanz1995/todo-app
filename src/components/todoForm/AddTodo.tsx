@@ -1,31 +1,58 @@
 import React, { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTodos } from '../../feature/todo/todoSlice';
-import { StyledAddTodoContainer } from './styles';
+import { createTodo } from '../../feature/action/todoAction';
+import { StyledAddTodoContainer, StyledButton } from './styles';
+import { formValueTypes } from '../../types'
+import Modal from '../modal/Modal';
+import * as yup from 'yup';
+import { Formik } from 'formik';
 
-const AddTodo: FC = () => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+const formValidation = yup.object().shape({
+    title: yup.string().required('Title is required!'),
+    content: yup.string().required('Content is required!')
+})
 
-    const dispatch = useDispatch();
+const initialValue: formValueTypes = {
+    title: '',
+    content: ''
+}
 
-    const handleAddTodo = (evt: any) => {
-        evt.preventDefault();
+const AddTodo: FC<{ handleClose: any }> = ({ handleClose }) => {
+    const dispatch: any = useDispatch();
+    const handleAddTodo = (values: formValueTypes) => {
         const formData = {
-            title: title,
-            content: content
+            title: values.title,
+            content: values.content
         }
-        // @ts-ignore
-        dispatch(addTodos(formData))
+
+        dispatch(createTodo(formData))
+        handleClose()
     }
     return (
-        <StyledAddTodoContainer>
-            <form onSubmit={handleAddTodo}>
-                <input type="text" name="title" placeholder="Write a title" value={title} onChange={({target}) => setTitle(target.value)} />
-                <textarea name="content" placeholder="Write a content" value={content} onChange={({target}) => setContent(target.value)} />
-                <button type="submit">Add Todo</button>
-            </form>
-        </StyledAddTodoContainer>
+        <Modal>
+            <Formik initialValues={initialValue} onSubmit={handleAddTodo} validationSchema={formValidation}>
+                {({ handleSubmit, values, errors, handleChange, touched }: any) => (
+                    <StyledAddTodoContainer>
+                        <div className="add-header">
+                            <h3>Add Todos</h3>
+                            <button className="btn-close" onClick={handleClose}>Close</button>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" name="title" placeholder="Write a title" value={values.title} onChange={handleChange} />
+                            {errors.title && touched.title ? (
+                                <div className="error">{errors.title}</div>
+                            ): null}
+                            <textarea name="content" placeholder="Write a content" value={values.content} onChange={handleChange} />
+                            {errors.content && touched.content ? (
+                                <div className="error">{errors.content}</div>
+                            ): null}
+                            <StyledButton type="submit">Add Todo</StyledButton>
+                        </form>
+                    </StyledAddTodoContainer>
+                )}
+            </Formik>
+
+        </Modal>
     )
 }
 
