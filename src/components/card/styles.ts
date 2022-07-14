@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledCard = styled.main`
-  width: 350px;
+  width: 270px;
   height: 150px;
   box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
   padding: 10px;
@@ -19,4 +19,7 @@ export const StyledCardHeader = styled.div`
 
 export const StyledCardContent = styled.div`
   margin: 10px 0;
+  p {
+    margin: 20px 0;
+  }
 `;

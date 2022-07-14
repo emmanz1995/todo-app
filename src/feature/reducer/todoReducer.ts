@@ -1,4 +1,5 @@
 import * as types from '../types';
+import { ITodos } from '../../types';
 
 const initialState = {
     loading: false,
@@ -37,15 +38,14 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
             }
         case types.UPDATE_TODO:
             return {
-                ...state,
-                todos: {
-                    ...state.todos.map((todo: any) => {
+                todos: [
+                    ...state.todos.map((todo: ITodos) => {
                         return (
-                            todo._id === payload.todo._id ?
+                            todo._id === payload._id ?
                                 { isComplete: !state.isComplete } : payload
                         )
                     })
-                },
+                ],
                 loading: false
             }
         case types.UPDATE_TODO_ERROR:
@@ -55,11 +55,12 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
             }
         case types.DELETE_TODO:
             return {
-                ...state,
-                todos: {
-                    ...state.todos.filter((todo: any) => todo._id !== payload._id)
-                },
-                loading: false
+                todos: [
+                    ...state.todos.filter((todo: ITodos) => (
+                        todo._id !== payload._id
+                    ))
+                ],
+                loading: false,
             }
         case types.DELETE_TODO_ERROR:
             return {
@@ -70,4 +71,4 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
     }
 }
 
-export default todoReducer
+export default todoReducer;

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { createTodo } from '../../feature/action/todoAction';
 import { StyledAddTodoContainer, StyledButton } from './styles';
@@ -6,10 +6,11 @@ import { formValueTypes } from '../../types'
 import Modal from '../modal/Modal';
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import { FaTimesCircle } from 'react-icons/fa';
 
 const formValidation = yup.object().shape({
     title: yup.string().required('Title is required!'),
-    content: yup.string().required('Content is required!')
+    content: yup.string().required('Content is required!').min(15).max(100)
 })
 
 const initialValue: formValueTypes = {
@@ -23,11 +24,11 @@ const AddTodo: FC<{ handleClose: any }> = ({ handleClose }) => {
         const formData = {
             title: values.title,
             content: values.content
-        }
+        };
 
-        dispatch(createTodo(formData))
-        handleClose()
-    }
+        dispatch(createTodo(formData));
+        handleClose();
+    };
     return (
         <Modal>
             <Formik initialValues={initialValue} onSubmit={handleAddTodo} validationSchema={formValidation}>
@@ -35,7 +36,7 @@ const AddTodo: FC<{ handleClose: any }> = ({ handleClose }) => {
                     <StyledAddTodoContainer>
                         <div className="add-header">
                             <h3>Add Todos</h3>
-                            <button className="btn-close" onClick={handleClose}>Close</button>
+                            <FaTimesCircle size={20} className="btn-close" onClick={handleClose} />
                         </div>
                         <form onSubmit={handleSubmit}>
                             <input type="text" name="title" placeholder="Write a title" value={values.title} onChange={handleChange} />
@@ -51,9 +52,8 @@ const AddTodo: FC<{ handleClose: any }> = ({ handleClose }) => {
                     </StyledAddTodoContainer>
                 )}
             </Formik>
-
         </Modal>
-    )
-}
+    );
+};
 
-export default AddTodo
+export default AddTodo;

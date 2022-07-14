@@ -23,9 +23,6 @@ export const StyledAddTodoContainer = styled.div`
     height: 100px;
   }
   .btn-close {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 2px 7px;
     cursor: pointer;
   }
   .error {
