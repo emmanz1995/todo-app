@@ -7,7 +7,7 @@ export interface Todo {
 export interface ITodos extends Todo {
     createdAt?: string;
     updatedAt?: string;
-    isComplete?: boolean;
+    isComplete: boolean;
 }
 
 export interface formValueTypes {

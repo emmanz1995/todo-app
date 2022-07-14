@@ -1,12 +1,17 @@
 import styled from 'styled-components';
 
 export const StyledCard = styled.main`
-  width: 270px;
-  height: 150px;
+  width: 319px;
+  //height: 150px;
   box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
   padding: 10px;
   background-color: #fff;
   border-radius: 5px;
+  cursor: pointer;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    margin: 20px;
+  }
 `;
 
 export const StyledCardHeader = styled.div`

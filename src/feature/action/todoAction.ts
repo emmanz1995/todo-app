@@ -6,7 +6,7 @@ import {
     updateOneTodo
 } from '../../service/todoService';
 import { Dispatch } from 'redux';
-import {Todo} from '../../types';
+import { ITodos } from '../../types';
 
 export const getAllTodos = () => async (dispatch: Dispatch) => {
     try {
@@ -40,9 +40,9 @@ export const createTodo = (formData: { title: string; content: string }) => asyn
     }
 }
 
-export const updateTodo = (formData: Todo, id: string) => async (dispatch: Dispatch) => {
+export const updateTodo = (formData: ITodos, id: string) => async (dispatch: Dispatch) => {
     try {
-        const response = await updateOneTodo(formData, id)
+        const response = await updateOneTodo({ ...formData, isComplete: !formData.isComplete }, id)
         dispatch({
             type: types.UPDATE_TODO,
             payload: response

@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { ITodos } from '../../types';
-import { StyledNav, StyledSection, StyledMainSection } from './styledHome';
+import { StyledSection, StyledMainSection } from './styledHome';
 import { useDispatch, useSelector } from 'react-redux';
 import AddTodo from '../../components/todoForm/AddTodo';
 import { getAllTodos, deleteTodo } from '../../feature/action/todoAction';
 import Card from '../../components/card/Card';
 import { AnimatePresence } from 'framer-motion';
+import Layout from '../../components/layout/Layout';
+import moment from 'moment';
 
 const Home: FC = () => {
     const dispatch: any = useDispatch();
@@ -23,10 +25,7 @@ const Home: FC = () => {
     )): <p>No Todos found!</p>
 
     return (
-        <div>
-            <StyledNav>
-                <h3>Todo Kanban Tracker</h3>
-            </StyledNav>
+        <Layout>
             <StyledMainSection>
                 <AnimatePresence
                     initial={false}
@@ -35,12 +34,21 @@ const Home: FC = () => {
                 >
                     {isOpen && <AddTodo handleClose={handleClose} />}
                 </AnimatePresence>
-                <button onClick={handleOpen} className="btn-add">Add Todo</button>
+                <div className="flex-heading">
+                    <div>
+                        <h3>Your Tasks</h3>
+                        <span>{moment(new Date().toISOString()).format('YYYY-MM-DD HH:mm')}</span>
+                    </div>
+                    <span>
+                        <input type="search" className="search-bar" placeholder="Search a Todo" />
+                    </span>
+                    <button onClick={handleOpen} className="btn-add">Add Todo</button>
+                </div>
                 <StyledSection>
                     {displayTodos}
                 </StyledSection>
             </StyledMainSection>
-        </div>
+        </Layout>
     );
 };
 

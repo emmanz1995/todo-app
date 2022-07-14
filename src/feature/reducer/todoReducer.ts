@@ -9,6 +9,7 @@ const initialState = {
 
 const todoReducer = (state: any = initialState, action: { type: any; payload: any; }) => {
     const { type, payload } = action;
+    console.log(payload);
     switch(type) {
         case types.GET_TODOS_PENDING:
             return {
@@ -27,7 +28,7 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
             }
         case types.CREATE_TODO:
             return {
-                todos: [...state.todos, payload],
+                todos: [ ...state.todos, payload ],
                 loading: false
             }
         case types.CREATE_TODO_ERROR:
@@ -42,7 +43,7 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
                     ...state.todos.map((todo: ITodos) => {
                         return (
                             todo._id === payload._id ?
-                                { isComplete: !state.isComplete } : payload
+                                { ...todo, isComplete: !state.isComplete } : todo
                         )
                     })
                 ],
