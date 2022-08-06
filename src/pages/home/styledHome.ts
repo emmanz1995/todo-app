@@ -49,3 +49,17 @@ export const StyledTable = styled.table`
   }
 `;
 
+export const StyledPagination = styled.div`
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StyledPaginationItem = styled.button`
+  padding: 10px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+`;

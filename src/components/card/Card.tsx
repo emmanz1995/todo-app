@@ -12,16 +12,17 @@ const Card: FC<{ todo: ITodos }> = ({ todo }) => {
     const handleDeleteTodo = (id: string) => {
 
         if(window.confirm('Are you sure you want to delete this Todo?')) {
-            // @ts-ignore
-            dispatch(deleteTodo(id));
+            dispatch<any>(deleteTodo(id));
         } else {
             return false;
         }
     };
 
-    const handleCompleteTodo = (isComplete: boolean | undefined, id: string) => {
-        // @ts-ignore
-        dispatch(updateTodo(isComplete, id))
+    const handleCompleteTodo = (isComplete: boolean, id: string) => {
+        const data = {
+            isComplete: isComplete
+        }
+        dispatch<any>(updateTodo(data, id));
     }
     return (
         <StyledCard>
@@ -31,9 +32,9 @@ const Card: FC<{ todo: ITodos }> = ({ todo }) => {
                     <FaTrash size={15} onClick={() => handleDeleteTodo(todo._id)} />{' '}
                     {
                         todo.isComplete ?
-                        <FaTimesCircle size={15} onClick={() => handleCompleteTodo(todo.isComplete, todo._id)} />
+                        <FaTimesCircle size={15} onClick={() => handleCompleteTodo(true, todo._id)} />
                         :
-                        <FaCheck onClick={() => handleCompleteTodo(todo.isComplete, todo._id)} size={15} />
+                        <FaCheck onClick={() => handleCompleteTodo(false, todo._id)} size={15} />
                     }
                 </span>
             </StyledCardHeader>

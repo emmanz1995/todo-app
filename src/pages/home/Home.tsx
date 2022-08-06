@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { ITodos } from '../../types';
-import { StyledSection, StyledMainSection } from './styledHome';
+import { StyledSection, StyledMainSection, StyledPagination, StyledPaginationItem } from './styledHome';
 import { useDispatch, useSelector } from 'react-redux';
 import AddTodo from '../../components/todoForm/AddTodo';
-import { getAllTodos, deleteTodo } from '../../feature/action/todoAction';
+import { getAllTodos } from '../../feature/action/todoAction';
 import Card from '../../components/card/Card';
 import { AnimatePresence } from 'framer-motion';
 import Layout from '../../components/layout/Layout';
@@ -11,11 +11,13 @@ import moment from 'moment';
 
 const Home: FC = () => {
     const dispatch: any = useDispatch();
-    const { todos, loading } = useSelector((state: any) => state.todos);
+    const { todos, loading, numberOfPages } = useSelector((state: any) => state.todos);
     const [isOpen, setIsOpen] = useState(false);
+    const [pageNumber, setPageNumber] = useState(1);
+    const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
     useEffect(() => {
-        dispatch(getAllTodos());
-    }, []);
+        if(pageNumber) dispatch(getAllTodos(pageNumber));
+    }, [dispatch, pageNumber]);
 
     const handleOpen = () => setIsOpen(true);
     const handleClose: any = () => setIsOpen(false);
@@ -23,6 +25,14 @@ const Home: FC = () => {
     const displayTodos = todos?.length > 0 ? todos?.map((todo: ITodos) => (
         <Card todo={todo} />
     )): <p>No Todos found!</p>
+
+    const previousIndex = () => {
+        setPageNumber(Math.max(0, pageNumber - 1));
+    }
+
+    const nextIndex = () => {
+        setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1))
+    }
 
     return (
         <Layout>
@@ -48,6 +58,17 @@ const Home: FC = () => {
                     {displayTodos}
                 </StyledSection>
             </StyledMainSection>
+            <StyledPagination>
+                {pages.length > 1 ?
+                    <>
+                        <StyledPaginationItem onClick={previousIndex}>Previous</StyledPaginationItem>
+                        {pages?.length > 0 ? pages?.map((pageIndex: number) => (
+                            <StyledPaginationItem onClick={() => setPageNumber(pageIndex + 1)}>{pageIndex + 1}</StyledPaginationItem>
+                        )): <p>No Pages</p>}
+                        <StyledPaginationItem onClick={nextIndex}>Next</StyledPaginationItem>
+                    </> : ''
+                }
+            </StyledPagination>
         </Layout>
     );
 };

@@ -7,9 +7,14 @@ const initialState = {
     error: ''
 }
 
-const todoReducer = (state: any = initialState, action: { type: any; payload: any; }) => {
+type stateType = {
+    loading: boolean;
+    todos: any;
+    error: string;
+}
+
+const todoReducer = (state: stateType = initialState, action: { type: string; payload: any; }) => {
     const { type, payload } = action;
-    console.log(payload);
     switch(type) {
         case types.GET_TODOS_PENDING:
             return {
@@ -18,7 +23,9 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
         case types.GET_TODOS:
             return {
                 ...state,
-                todos: payload,
+                todos: payload.data,
+                currentPage: payload.page,
+                numberOfPages: payload.numberOfPages,
                 loading: false
             }
         case types.GET_TODOS_ERROR:
@@ -42,8 +49,7 @@ const todoReducer = (state: any = initialState, action: { type: any; payload: an
                 todos: [
                     ...state.todos.map((todo: ITodos) => {
                         return (
-                            todo._id === payload._id ?
-                                { ...todo, isComplete: !state.isComplete } : todo
+                            todo._id === payload._id ? { ...todo, ...payload } : todo
                         )
                     })
                 ],

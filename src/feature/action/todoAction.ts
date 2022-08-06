@@ -8,9 +8,9 @@ import {
 import { Dispatch } from 'redux';
 import { ITodos } from '../../types';
 
-export const getAllTodos = () => async (dispatch: Dispatch) => {
+export const getAllTodos = (page: string | number) => async (dispatch: Dispatch) => {
     try {
-        const response = await fetchAll()
+        const response = await fetchAll(page)
         dispatch({
             type: types.GET_TODOS,
             payload: response
@@ -40,9 +40,9 @@ export const createTodo = (formData: { title: string; content: string }) => asyn
     }
 }
 
-export const updateTodo = (formData: ITodos, id: string) => async (dispatch: Dispatch) => {
+export const updateTodo = (formData: { isComplete: boolean }, id: string) => async (dispatch: Dispatch) => {
     try {
-        const response = await updateOneTodo({ ...formData, isComplete: !formData.isComplete }, id)
+        const response = await updateOneTodo({ isComplete: !formData.isComplete }, id)
         dispatch({
             type: types.UPDATE_TODO,
             payload: response
